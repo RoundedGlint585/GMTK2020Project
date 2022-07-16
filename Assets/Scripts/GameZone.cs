@@ -24,11 +24,14 @@ public class GameZone : MonoBehaviour
         var currentCellPosition = origin;
         var width = int.Parse(sizes[0]);
         var height = int.Parse(sizes[1]);
+
+        var ListColorTiles = new List<ColorTile>();
+
         for(var h = 0; h < height; h++)
         {
             for(var w = 0; w < width; w++)
             {
-                _gameZoneTilemap.SetTile(currentCellPosition, TilesResourceLoader.GetBaseTile());
+                _gameZoneTilemap.SetTile(currentCellPosition, TilesResourceLoader.GetBaseTile()._tile);
                 currentCellPosition = new Vector3Int((int)(cellSize.x + currentCellPosition.x), currentCellPosition.y, origin.z);
             }
             currentCellPosition = new Vector3Int(origin.x, (int) (cellSize.y+currentCellPosition.y), origin.z);
@@ -40,8 +43,6 @@ public class GameZone : MonoBehaviour
 
     private void SetupTiles()
     {
-        //var tilemap = GetComponentInChildren<Tilemap>();
-
         var localTilesPositions = new List<Vector3Int>();
 
         foreach( var pos in _gameZoneTilemap.cellBounds.allPositionsWithin)
@@ -56,7 +57,7 @@ public class GameZone : MonoBehaviour
     private void SetupPath(List<Vector3Int> positions, Tilemap tilemap)
     {
         var path = _levelData[Level].path;
-        var horizontalTile = TilesResourceLoader.GetStartStopTile();
+        var horizontalTile = TilesResourceLoader.GetStartStopTile()._tile;
         var first = path.First();
         var last = path.Last();
 

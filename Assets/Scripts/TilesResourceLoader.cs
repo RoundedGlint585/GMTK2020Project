@@ -7,23 +7,23 @@ public static class TilesResourceLoader
     private const string StartStop = "start_stop";
     private const string BaseTile = "clean";
 
-    public static Tile GetHorizontalTile()
+    public static ColorTile GetHorizontalTile()
     {
         return GetTileByName(Horizontal);
     }
 
-    public static Tile GetStartStopTile()
+    public static ColorTile GetStartStopTile()
     {
         return GetTileByName(StartStop);
     }
 
-    public static Tile GetBaseTile()
+    public static ColorTile GetBaseTile()
     {
         return GetTileByName(BaseTile);
     }
 
-    private static Tile GetTileByName(string name)
+    private static ColorTile GetTileByName(string name)
     {
-        return (Tile)Resources.Load(name, typeof(Tile));
+        return new ColorTile(new Color(1,1,1), (Tile)Resources.Load(name, typeof(Tile)));
     }
 }
