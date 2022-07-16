@@ -22,8 +22,7 @@ public class Movement : MonoBehaviour
             Assemble(Vector3.right);
             return;
         }
-        if (Input.GetKey(KeyCode.W))
-        {
+        if (Input.GetKey(KeyCode.W)) { 
             Assemble(Vector3.forward);
             return;
         }
@@ -35,7 +34,7 @@ public class Movement : MonoBehaviour
 
         void Assemble(Vector3 dir)
         {
-
+           
             var anchor = transform.position + (Vector3.down + dir) * 0.5f;
             var axis = Vector3.Cross(Vector3.up, dir);
             StartCoroutine(Roll(anchor, axis));
