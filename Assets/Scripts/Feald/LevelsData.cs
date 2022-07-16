@@ -11,7 +11,16 @@ public class LevelsData
     [Serializable]
     public class LevelData
     {
-         public int number;
-         public int[] path;
+        public int number;
+        public string size;
+        public int[] green;
+        public int[] blue;
+        public int[] red;
+        public int[] yellow;
+        public int[] purple;
+        public int[] orange;
+        public int[][] avoid;
+        public int[] monstr;
+        public int[] wall;
     }
 }

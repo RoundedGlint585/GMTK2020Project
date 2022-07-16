@@ -2,15 +2,51 @@
   "levels": [
     {
       "number": 1,
-      "path": [ 22, 32 ]
+      "size": "4x4",
+      "green": [ 1, 2, 4 ],
+      "red": [ 6 ],
+      "blue": [ 3, 8 ],
+      "yellow": [ 9, 10 ],
+      "purple": [ 7, 11 ],
+      "orange": [ 14 ],
+      "avoid": [
+        [ 15, 3 ],
+        [ 14, 2 ]
+      ],
+      "monstr": [ 13 ],
+      "wall": [ 12 ]
     },
     {
       "number": 2,
-      "path": [2, 4]
+      "size": "4x4",
+      "green": [ 1, 2, 4 ],
+      "red": [ 6 ],
+      "blue": [ 3, 8 ],
+      "yellow": [ 9, 10 ],
+      "purple": [ 7, 11 ],
+      "orange": [ 14 ],
+      "avoid": [
+        [ 15, 3 ],
+        [ 14, 2 ]
+      ],
+      "monstr": [ 13 ],
+      "wall": [ 12 ]
     },
     {
       "number": 3,
-      "path": [ 88, 98 ]
+      "size": "4x4",
+      "green": [ 1, 2, 4 ],
+      "red": [ 6 ],
+      "blue": [ 3, 8 ],
+      "yellow": [ 9, 10 ],
+      "purple": [ 7, 11 ],
+      "orange": [ 14 ],
+      "avoid": [
+        [ 15, 3 ],
+        [ 14, 2 ]
+      ],
+      "monstr": [ 13 ],
+      "wall": [ 12 ]
     }
   ]
 }
