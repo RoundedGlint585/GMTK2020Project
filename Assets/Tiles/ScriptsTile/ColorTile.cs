@@ -1,20 +1,17 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-
-[CreateAssetMenu(menuName = "Tiles/ScriptsTile/ColorTile")]
-public class ColorTile : MonoBehaviour
+public class ColorTile : BasicTile
 {
-    public Color _color;
-    public Tile _tile;
-
-    public ColorTile(Color color, Tile tile)
+#if UNITY_EDITOR
+    // The following is a helper that adds a menu item to create a RoadTile Asset
+    [MenuItem("Assets/Create/2D/Tiles/ColorTile")]
+    public static void CreateColorTile()
     {
-        _color = color;
-        _tile = tile;
+        string path = EditorUtility.SaveFilePanelInProject("Save Color Tile", "New Color Tile", "Asset", "Save Color Tile", "Assets");
+        if (path == "")
+            return;
+        AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<ColorTile>(), path);
     }
-
-    public void updateColor ()
-    {
-        _tile.color = new Color(0.4f, 0.5f, 0.3f);
-    }
+#endif
 }

@@ -31,7 +31,7 @@ public class GameZone : MonoBehaviour
         {
             for(var w = 0; w < width; w++)
             {
-                _gameZoneTilemap.SetTile(currentCellPosition, TilesResourceLoader.GetBaseTile()._tile);
+                _gameZoneTilemap.SetTile(currentCellPosition, TilesResourceLoader.GetBaseTile());
                 currentCellPosition = new Vector3Int((int)(cellSize.x + currentCellPosition.x), currentCellPosition.y, origin.z);
             }
             currentCellPosition = new Vector3Int(origin.x, (int) (cellSize.y+currentCellPosition.y), origin.z);
@@ -57,7 +57,7 @@ public class GameZone : MonoBehaviour
     private void SetupPath(List<Vector3Int> positions, Tilemap tilemap)
     {
         var path = _levelData[Level].path;
-        var horizontalTile = TilesResourceLoader.GetStartStopTile()._tile;
+        var horizontalTile = TilesResourceLoader.GetStartStopTile();
         var first = path.First();
         var last = path.Last();
 

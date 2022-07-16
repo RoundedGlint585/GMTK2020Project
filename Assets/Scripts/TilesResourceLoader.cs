@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -5,25 +6,25 @@ public static class TilesResourceLoader
 {
     private const string Horizontal = "horizontal";
     private const string StartStop = "start_stop";
-    private const string BaseTile = "clean";
+    private const string BasicTile = "BasicTile";
 
-    public static ColorTile GetHorizontalTile()
+    public static Tile GetHorizontalTile()
     {
-        return GetTileByName(Horizontal);
+        return GetTileByName(BasicTile);
     }
 
-    public static ColorTile GetStartStopTile()
+    public static Tile GetStartStopTile()
     {
-        return GetTileByName(StartStop);
+        return GetTileByName(BasicTile);
     }
 
-    public static ColorTile GetBaseTile()
+    public static Tile GetBaseTile()
     {
-        return GetTileByName(BaseTile);
+        return GetTileByName(BasicTile);
     }
 
-    private static ColorTile GetTileByName(string name)
+    private static Tile GetTileByName(string name)
     {
-        return new ColorTile(new Color(1,1,1), (Tile)Resources.Load(name, typeof(Tile)));
+        return (Tile)Resources.Load("ColorTile", typeof(ColorTile));
     }
 }
