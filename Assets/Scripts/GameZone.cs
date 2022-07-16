@@ -66,4 +66,27 @@ public class GameZone : MonoBehaviour
             tilemap.SetTile(pos, horizontalTile); 
         }
     }
+    public bool isPossibleToMoveFromTo(Vector3Int from, Vector3Int to)
+    {
+        Vector3Int size = _gameZoneTilemap.size;
+        if (to.x > size.x || to.y > size.y)
+        {
+            return false;
+        }
+        if (to.x < 0 || to.y < 0)
+        {
+            return false;
+        }
+        Tile tileTo = _gameZoneTilemap.GetTile<Tile>(to);
+        Vector3Int diffs = to - from;
+        diffs.x = Mathf.Abs(diffs.x);
+        diffs.y = Mathf.Abs(diffs.y);
+        diffs.z = Mathf.Abs(diffs.z);
+        if (diffs.x > 1 || diffs.y > 1 || diffs.z > 1)
+        {
+            return false;
+        }
+        //placeholder for check for walls and enemies
+        return true;
+    }
 }
