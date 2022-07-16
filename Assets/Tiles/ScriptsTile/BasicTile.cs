@@ -16,20 +16,17 @@ public class BasicTile : Tile
     public override void RefreshTile(Vector3Int location, ITilemap tilemap)
     {
         for (int yd = -1; yd <= 1; yd++)
+        {
             for (int xd = -1; xd <= 1; xd++)
             {
                 Vector3Int position = new Vector3Int(location.x + xd, location.y + yd, location.z);
                 tilemap.RefreshTile(position);
             }
-    }
-
-    void Start()
-    {
-        m_go = new GameObject("Empty");
-        m_go.AddComponent<MeshFilter>();
-        MeshRenderer mr = m_go.AddComponent<MeshRenderer>();
-        m_go.GetComponent<MeshFilter>().mesh = m_Mesh;
-        mr.sharedMaterial = m_material;
+        }
+        m_go = Instantiate(Resources.Load("BasicFloorCube")) as GameObject;
+        m_go.transform.position = location;
+        //m_go.transform.rotation = Quaternion.Euler(-90, 0, 0);
+        m_go.transform.parent = GameObject.Find("Tilemap").transform;
 
     }
     void Update()

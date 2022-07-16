@@ -25,6 +25,6 @@ public static class TilesResourceLoader
 
     private static Tile GetTileByName(string name)
     {
-        return (Tile)Resources.Load("ColorTile", typeof(ColorTile));
+        return (Tile)Resources.Load("BasicTile", typeof(BasicTile));
     }
 }
