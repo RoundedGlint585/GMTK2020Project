@@ -11,7 +11,10 @@ public class Movement : MonoBehaviour
     private Cube_Script _cubeScript;
     private GameController _gameController;
     private StateSides[] _stateSides;
-
+    GameObject[] walls = null;
+    GameObject[] tiles = null;
+    GameObject[] monsters = null;
+    GameObject[] specialTiles = null;
     private void Start()
     {
         _cubeScript = GetComponent<Cube_Script>();
@@ -19,36 +22,126 @@ public class Movement : MonoBehaviour
         _stateSides = FindObjectsOfType<StateSides>();
     }
 
+    enum MovementResult
+    {
+        Die,
+        CannotMove,
+        CanMove,
+        KillMonster,
+        Win,
+
+    }
+    private MovementResult MovementCheck(KeyCode keyCode)
+    {
+        float x = transform.position.x;
+        float z = transform.position.z;
+        if (keyCode == KeyCode.A)
+        {
+            x -= 4;
+        }
+        if (keyCode == KeyCode.D)
+        {
+            x += 4;
+        }
+        if (keyCode == KeyCode.W)
+        {
+            z += 4;
+        }
+        if (keyCode == KeyCode.S)
+        {
+            z -= 4;
+        }
+        foreach (GameObject obj in walls)
+        {
+            if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
+            {
+                return MovementResult.CannotMove;
+            }
+        }
+        foreach(GameObject obj in monsters)
+        {
+            if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
+            {
+                if (!obj.transform.Find("Monster").gameObject.active)
+                {
+                    return MovementResult.CanMove;
+                }
+                obj.transform.Find("Monster").gameObject.SetActive(false);
+                if (monsters.Length == 1)
+                {
+                    return MovementResult.CanMove;
+                    return MovementResult.Win;
+                }
+                else
+                {
+
+                    return MovementResult.CanMove;
+                    return MovementResult.KillMonster;
+                }
+            }
+        }
+        foreach (GameObject obj in tiles)
+        {
+            if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
+            {
+                return MovementResult.CanMove;
+            }
+        }
+        return MovementResult.CannotMove;
+    }
 
     private void Update()
     {
+
+        if (walls == null)
+        {
+            walls = GameObject.FindGameObjectsWithTag("Wall");
+        }
+        if (tiles == null)
+        {
+            tiles = GameObject.FindGameObjectsWithTag("Tile");
+        }
+        if (monsters == null)
+        {
+            monsters = GameObject.FindGameObjectsWithTag("Monster");
+        }
         if (_isMoving) return;
 
         if (_gameController != null)
         {
+
+            
             if (Input.GetKey(KeyCode.A))
             {
-                LeftMove(true);
-                ChangeSide();
+                if (MovementCheck(KeyCode.A) > MovementResult.CannotMove)
+                {
+                    LeftMove(true);
+                    ChangeSide();
+                }
                 return;
-            }
-
-            if (Input.GetKey(KeyCode.D))
+            }else if(Input.GetKey(KeyCode.D))
             {
-                RightMove(true);
-                ChangeSide();
+                if (MovementCheck(KeyCode.D) > MovementResult.CannotMove)
+                {
+                    RightMove(true);
+                    ChangeSide();
+                }
                 return;
-            }
-            if (Input.GetKey(KeyCode.W))
+            } else if (Input.GetKey(KeyCode.W))
             {
-                ForwardMove(true);
-                ChangeSide();
+                if (MovementCheck(KeyCode.W) > MovementResult.CannotMove)
+                {
+                    ForwardMove(true);
+                    ChangeSide();
+                }
                 return;
-            }
-            if (Input.GetKey(KeyCode.S))
+            } else if (Input.GetKey(KeyCode.S))
             {
-                BackMove(true);
-                ChangeSide();
+                if (MovementCheck(KeyCode.S) > MovementResult.CannotMove)
+                {
+                    BackMove(true);
+                    ChangeSide();
+                }
                 return;
             }
 
