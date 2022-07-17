@@ -701,7 +701,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5337072063415041461}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5286215a9c962d4f85422955c68b68b, type: 3}
+  m_Script: {fileID: 11500000, guid: 6dc30e21051df304d8b99887555fc0a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rollSpeed: 3
+  Size: 8x8
+  _nameStates: []
+  _SideState: []

@@ -27,6 +27,7 @@ public class BasicTile : Tile
         m_go.transform.position = location;
         //m_go.transform.rotation = Quaternion.Euler(-90, 0, 0);
         m_go.transform.parent = GameObject.Find("Tilemap").transform;
+        m_go.transform.localScale = (new Vector3(0.5f, 0.5f, 0.5f));
 
     }
     void Update()

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    public string Size = "8x8";
+    public string Size = "16x16";
 
     [SerializeField] private string[] _nameStates;
     [SerializeField] private Side[] _SideState;

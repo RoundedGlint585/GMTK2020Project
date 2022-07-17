@@ -97,6 +97,8 @@ public class Movement : MonoBehaviour
     IEnumerator Roll(Vector3 anchor, Vector3 axis)
     {
         _isMoving = true;
+        AudioSource audioSource = this.GetComponentInParent<AudioSource>();
+        audioSource.Play();
         for (int i = 0; i < (90 / _rollSpeed); i++)
         {
             transform.RotateAround(anchor, axis, _rollSpeed);
