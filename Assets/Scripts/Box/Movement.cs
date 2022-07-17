@@ -172,7 +172,7 @@ public class Movement : MonoBehaviour
         {
             if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
             {
-                if (!obj.transform.Find("Monster").gameObject.active)
+                if (!obj.transform.Find("Monster"))
                 {
                     return MovementResult.CanMove;
                 }
