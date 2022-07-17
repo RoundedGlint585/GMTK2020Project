@@ -6,9 +6,42 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/MenuScene.unity
+    guid: 9ff77c7b04f409c4285350f1993707ae
+  - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/MenuScene.unity
-    guid: 9ff77c7b04f409c4285350f1993707ae
+    path: Assets/Scenes/SampleScene 1.unity
+    guid: abaf1696ff45f2c408b4f51683966fb4
+  - enabled: 1
+    path: Assets/Scenes/SampleScene 2.unity
+    guid: 5311f704f7e6540449e83102a08b4355
+  - enabled: 1
+    path: Assets/Scenes/SampleScene 3.unity
+    guid: 5c95bc8934ef33646afceacaeb7d6957
+  - enabled: 1
+    path: Assets/Scenes/SampleScene 4.unity
+    guid: 6ad4dd45aab97544286e86f4f2996446
+  - enabled: 1
+    path: Assets/Scenes/SampleScene 5.unity
+    guid: f0a35d4c08da1d9438c441e64da8f3e8
+  - enabled: 1
+    path: Assets/Scenes/SampleScene 6.unity
+    guid: a00f76e2186a73a4cb988456ccac4154
+  - enabled: 1
+    path: Assets/Scenes/SampleScene 7.unity
+    guid: 72c1b13d53d599346aa58934cc40b1f2
+  - enabled: 1
+    path: Assets/Scenes/SampleScene 8.unity
+    guid: 2841dee4d2bfc16478a20f44622cc131
+  - enabled: 1
+    path: Assets/Scenes/SampleScene 9.unity
+    guid: d5380a3fcc0c8b84ea0341318dff4b7f
+  - enabled: 1
+    path: Assets/Scenes/SampleScene 10.unity
+    guid: 7cc52ff1f545de940867d7da24af294f
+  - enabled: 1
+    path: Assets/Scenes/SampleScene 11.unity
+    guid: 5153fe99e8fef5c428418be224655318
   m_configObjects: {}
