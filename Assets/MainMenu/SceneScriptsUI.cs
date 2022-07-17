@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class SceneScriptsUI : MonoBehaviour
 {
     private Movement _mvmt;
     private Cube_Script _cube;
+    private bool flags = true;
 
     public void GoToMenu()
     {
@@ -15,7 +17,12 @@ public class SceneScriptsUI : MonoBehaviour
 
     public void StepBack()
     {
-        _cube.ReMove();
+        if (flags)
+        {
+            _mvmt.RealRemove();
+            flags = false;
+            StartCoroutine(Wait());
+        }
     }
 
     public void ReLoad()
@@ -39,5 +46,11 @@ public class SceneScriptsUI : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
+    }
+
+    IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(0.3f);
+        flags = true;
     }
 }

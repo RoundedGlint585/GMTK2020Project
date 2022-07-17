@@ -40,7 +40,7 @@ public class StateSides : MonoBehaviour
 
     public void RemoveState()
     {
-        if (_newState.Count > 0)
+        if (_newState.Count > 1)
         {
             string oneState = _newState.Pop();
             if (oneState != _newState.Peek())
@@ -58,7 +58,4 @@ public class StateSides : MonoBehaviour
     {
         return _nameState;
     }
-
-
-
 }
