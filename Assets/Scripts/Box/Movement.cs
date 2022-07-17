@@ -177,7 +177,7 @@ public class Movement : MonoBehaviour
                     return MovementResult.CanMove;
                 }
                 //obj.transform.Find("Monster").gameObject.SetActive(false);
-                Destroy(obj.transform.Find("Monster"));
+                Destroy(obj.transform.Find("Monster").gameObject);
                 if (monsters.Length == 1)
                 {
                     return MovementResult.Win;
