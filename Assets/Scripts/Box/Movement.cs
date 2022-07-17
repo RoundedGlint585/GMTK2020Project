@@ -28,7 +28,7 @@ public class Movement : MonoBehaviour
         _stateSides = FindObjectsOfType<StateSides>();
     }
 
-    enum MovementResult
+    public enum MovementResult
     {
         Die,
         CannotMove,
@@ -42,6 +42,10 @@ public class Movement : MonoBehaviour
 
     }
 
+    public MovementResult GetCurrentMovementResults()
+    {
+        return movementResult;
+    }
 
     private void UpdateSide()
     {
@@ -118,8 +122,7 @@ public class Movement : MonoBehaviour
             }
             else
             {
-
-                //DEATH CASE?
+                movementResult = MovementResult.Die;
             }
             stateSides.AddMoveSide("Empty");
         }
@@ -173,16 +176,14 @@ public class Movement : MonoBehaviour
                 {
                     return MovementResult.CanMove;
                 }
-                obj.transform.Find("Monster").gameObject.SetActive(false);
+                //obj.transform.Find("Monster").gameObject.SetActive(false);
+                Destroy(obj.transform.Find("Monster").gameObject);
                 if (monsters.Length == 1)
                 {
-                    return MovementResult.CanMove;
                     return MovementResult.Win;
                 }
                 else
                 {
-
-                    return MovementResult.CanMove;
                     return MovementResult.KillMonster;
                 }
             }
