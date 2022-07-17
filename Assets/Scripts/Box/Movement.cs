@@ -94,7 +94,7 @@ public class Movement : MonoBehaviour
                         obj.transform.Find("default").gameObject.SetActive(true);
                     }
                 }
-                stateSides.AddMoveSide("Posion");
+                stateSides.AddMoveSide("Poison");
             }
         }        
         if (movementResult == MovementResult.PaintIntoEmpty)
