@@ -127,9 +127,9 @@ public class Movement : MonoBehaviour
 
     private void UpdateFaceDown()
     {
-        foreach(GameObject obj in CubeSides)
-        {
-            if (obj.transform.up == new Vector3(0.0f, -1.0f, 0.0f))
+        foreach(GameObject obj in CubeSides) {
+            //obj.transform.up == new Vector3(0.0f, -1.0f, 0.0f)
+            if (Mathf.Approximately(Vector3.Dot(new Vector3(0.0f, -1.0f, 0.0f), obj.transform.up), 1.0f) )
             {
                 currentFaceDown = obj;
                 return;
@@ -353,9 +353,9 @@ if (_isMoving) return;
             transform.RotateAround(anchor, axis, _rollSpeed);
             yield return new WaitForSeconds(0.01f);
         }
+        _isMoving = false;
         UpdateFaceDown();
         UpdateSide();
-        _isMoving = false;
     }
 
     public void ChangeSide()
