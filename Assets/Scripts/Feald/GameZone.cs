@@ -56,7 +56,7 @@ public class GameZone : MonoBehaviour
 
     private void SetupPath(List<Vector3Int> positions, Tilemap tilemap)
     {
-        var path = _levelData[Level].path;
+        var path = _levelData[Level].green;
         var horizontalTile = TilesResourceLoader.GetStartStopTile();
         var first = path.First();
         var last = path.Last();
