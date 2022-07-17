@@ -63,6 +63,8 @@ public class Movement : MonoBehaviour
                         obj.transform.tag = "Tile";
                         obj.transform.Find("Acid(Placeholder)").gameObject.SetActive(false);
                         obj.transform.Find("default").gameObject.SetActive(true);
+                        acidTiles = GameObject.FindGameObjectsWithTag("Acid");
+                        tiles = GameObject.FindGameObjectsWithTag("Tile");
                     }
                 }
                 stateSides.AddMoveSide("Acid");
@@ -80,6 +82,8 @@ public class Movement : MonoBehaviour
                         obj.transform.tag = "Tile";
                         obj.transform.Find("Fire(Placeholder)").gameObject.SetActive(false);
                         obj.transform.Find("default").gameObject.SetActive(true);
+                        fireTiles = GameObject.FindGameObjectsWithTag("Fire");
+                        tiles = GameObject.FindGameObjectsWithTag("Tile");
                     }
                 }
                 stateSides.AddMoveSide("Fire");
@@ -96,6 +100,8 @@ public class Movement : MonoBehaviour
                         obj.transform.tag = "Tile";
                         obj.transform.Find("Poison(Placeholder)").gameObject.SetActive(false);
                         obj.transform.Find("default").gameObject.SetActive(true);
+                        poisonTiles = GameObject.FindGameObjectsWithTag("Poison");
+                        tiles = GameObject.FindGameObjectsWithTag("Tile");
                     }
                 }
                 stateSides.AddMoveSide("Poison");
@@ -115,6 +121,8 @@ public class Movement : MonoBehaviour
                         {
                             obj.transform.Find("default").gameObject.SetActive(true);
                             obj.transform.tag = "Tile";
+                            cleanerTiles = GameObject.FindGameObjectsWithTag("Cleaner");
+                            tiles = GameObject.FindGameObjectsWithTag("Tile");
                         }
 
                     }
