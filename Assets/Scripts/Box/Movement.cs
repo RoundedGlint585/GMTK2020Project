@@ -153,20 +153,25 @@ public class Movement : MonoBehaviour
     {
         float x = transform.position.x;
         float z = transform.position.z;
+        Vector3 attackDirection = new Vector3(0, 0, 0);
         if (keyCode == KeyCode.A)
         {
             x -= 4;
+            attackDirection = new Vector3(-1, 0, 0);
         }
         if (keyCode == KeyCode.D)
         {
+            attackDirection = new Vector3(1, 0, 0);
             x += 4;
         }
         if (keyCode == KeyCode.W)
         {
+            attackDirection = new Vector3(0, 0, 1);
             z += 4;
         }
         if (keyCode == KeyCode.S)
         {
+            attackDirection = new Vector3(0, 0, -1);
             z -= 4;
         }
         foreach (GameObject obj in walls)
@@ -178,21 +183,87 @@ public class Movement : MonoBehaviour
         }
         foreach(GameObject obj in monsters)
         {
+            if(obj == null)
+            {
+                continue;
+            }
             if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
             {
-                if (!obj.transform.Find("Monster"))
+                string attackSide = "";
+                foreach (GameObject side in CubeSides)
                 {
-                    return MovementResult.CanMove;
+                    //obj.transform.up == new Vector3(0.0f, -1.0f, 0.0f)
+                    if (Mathf.Approximately(Vector3.Dot(attackDirection, side.transform.up), 1.0f))
+                    {
+                        attackSide = side.GetComponent<StateSides>().GetCurrentState();
+                        continue;
+                    }
                 }
-                //obj.transform.Find("Monster").gameObject.SetActive(false);
-                Destroy(obj.transform.Find("Monster").gameObject);
-                if (monsters.Length == 1)
+                if (obj.transform.Find("EyeEnemy"))
                 {
-                    return MovementResult.Win;
+                    if(attackSide == "Acid")
+                    {
+                        Destroy(obj.transform.Find("EyeEnemy").gameObject);
+                        obj.transform.tag = "Tile";
+                        monsters = GameObject.FindGameObjectsWithTag("Monster");
+                        tiles = GameObject.FindGameObjectsWithTag("Tile");
+                        if (monsters.Length == 1)
+                        {
+                            return MovementResult.Win;
+                        }
+                        else
+                        {
+                            return MovementResult.KillMonster;
+                        }
+                    }
+                    else
+                    {
+                        return MovementResult.Die;
+                    }
                 }
-                else
+                else if (obj.transform.Find("BookEnemy"))
                 {
-                    return MovementResult.KillMonster;
+                    if (attackSide == "Fire")
+                    {
+                        Destroy(obj.transform.Find("BookEnemy").gameObject);
+                        obj.transform.tag = "Tile";
+                        monsters = GameObject.FindGameObjectsWithTag("Monster");
+                        tiles = GameObject.FindGameObjectsWithTag("Tile");
+                        if (monsters.Length == 1)
+                        {
+                            return MovementResult.Win;
+                        }
+                        else
+                        {
+                            return MovementResult.KillMonster;
+                        }
+                    }
+                    else
+                    {
+                        return MovementResult.Die;
+                    }
+                }
+                else if (obj.transform.Find("PoisonEnemy"))
+                {
+                    if (attackSide == "Poison")
+                    {
+                        Destroy(obj.transform.Find("PoisonEnemy").gameObject);
+                        obj.transform.tag = "Tile";
+                        monsters = GameObject.FindGameObjectsWithTag("Monster");
+                        tiles = GameObject.FindGameObjectsWithTag("Tile");
+                        if (monsters.Length == 1)
+                        {
+                            return MovementResult.Win;
+                        }
+                        else
+                        {
+                            return MovementResult.KillMonster;
+                        }
+                    }
+                    else
+                    {
+                        return MovementResult.Die;
+                    }
                 }
             }
         }
