@@ -99,7 +99,28 @@ public class Movement : MonoBehaviour
         }        
         if (movementResult == MovementResult.PaintIntoEmpty)
         {
+            if (stateSides.GetCurrentState() != "Empty")
+            {
+                foreach (GameObject obj in cleanerTiles)
+                {
+                    if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
+                    {
+                        obj.GetComponentInChildren<CleanerTile>().DecreaseLife();
+                        int remainingLifes = obj.GetComponentInChildren<CleanerTile>().GetRemainingLifes();
+                        if (remainingLifes == 0)
+                        {
+                            obj.transform.Find("default").gameObject.SetActive(true);
+                            obj.transform.tag = "Tile";
+                        }
 
+                    }
+                }
+            }
+            else
+            {
+
+                //DEATH CASE?
+            }
             stateSides.AddMoveSide("Empty");
         }
     }
@@ -188,6 +209,14 @@ public class Movement : MonoBehaviour
                 return MovementResult.PaintIntoFire;
             }
         }
+
+        foreach (GameObject obj in cleanerTiles)
+        {
+            if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
+            {
+                return MovementResult.PaintIntoEmpty;
+            }
+        }
         foreach (GameObject obj in tiles)
         {
             if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
@@ -229,8 +258,12 @@ public class Movement : MonoBehaviour
         {
             fireTiles = GameObject.FindGameObjectsWithTag("Fire");
         }
+        if (cleanerTiles == null)
+        {
+            cleanerTiles = GameObject.FindGameObjectsWithTag("Cleaner");
+        }
 
-        if (_isMoving) return;
+if (_isMoving) return;
 
         if (_gameController != null)
         {
