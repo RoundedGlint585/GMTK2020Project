@@ -46,10 +46,21 @@ public class Movement : MonoBehaviour
     private void UpdateSide()
     {
         StateSides stateSides = currentFaceDown.GetComponent<StateSides>();
+        float x = transform.position.x;
+        float z = transform.position.z;
         if (movementResult == MovementResult.PaintIntoAcid)
         {
             if (stateSides.GetCurrentState() == "Empty")
             {
+                foreach (GameObject obj in acidTiles)
+                {
+                    if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
+                    {
+                        obj.transform.tag = "Tile";
+                        obj.transform.Find("Acid(Placeholder)").gameObject.SetActive(false);
+                        obj.transform.Find("default").gameObject.SetActive(true);
+                    }
+                }
                 stateSides.AddMoveSide("Acid");
             }
 
@@ -58,6 +69,15 @@ public class Movement : MonoBehaviour
         {
             if (stateSides.GetCurrentState() == "Empty")
             {
+                foreach (GameObject obj in fireTiles)
+                {
+                    if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
+                    {
+                        obj.transform.tag = "Tile";
+                        obj.transform.Find("Fire(Placeholder)").gameObject.SetActive(false);
+                        obj.transform.Find("default").gameObject.SetActive(true);
+                    }
+                }
                 stateSides.AddMoveSide("Fire");
             }
         }
@@ -65,6 +85,15 @@ public class Movement : MonoBehaviour
         {
             if (stateSides.GetCurrentState() == "Empty")
             {
+                foreach (GameObject obj in poisonTiles)
+                {
+                    if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
+                    {
+                        obj.transform.tag = "Tile";
+                        obj.transform.Find("Poison(Placeholder)").gameObject.SetActive(false);
+                        obj.transform.Find("default").gameObject.SetActive(true);
+                    }
+                }
                 stateSides.AddMoveSide("Posion");
             }
         }        
