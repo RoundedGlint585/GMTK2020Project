@@ -7,6 +7,11 @@ TagManager:
   - Tile
   - Wall
   - Monster
+  - Acid
+  - Poison
+  - Fire
+  - Cleaner
+  - CubeSide
   layers:
   - Default
   - TransparentFX

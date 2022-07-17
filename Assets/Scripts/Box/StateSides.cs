@@ -30,7 +30,7 @@ public class StateSides : MonoBehaviour
         _newState.Push(newState);
         prefside = _gameController.FindPrefsState(newState);
         Destroy(_side.gameObject);
-        _side = Instantiate(prefside, _gameObjectDad.gameObject.transform.position, Quaternion.identity, _gameObjectDad.gameObject.transform);
+        _side = Instantiate(prefside, _gameObjectDad.gameObject.transform.position, _gameObjectDad.gameObject.transform.rotation, _gameObjectDad.gameObject.transform);
     }
 
     public void AddMoveSide()
@@ -47,11 +47,16 @@ public class StateSides : MonoBehaviour
             {
                 Destroy(_side.gameObject);
                 prefside = _gameController.FindPrefsState(_newState.Peek());
-                _side = Instantiate(prefside, _gameObjectDad.gameObject.transform.position, Quaternion.identity, _gameObjectDad.gameObject.transform);
+                _side = Instantiate(prefside, _gameObjectDad.gameObject.transform.position, _gameObjectDad.gameObject.transform.rotation, _gameObjectDad.gameObject.transform);
             }
         }
         
         
+    }
+
+    public string GetCurrentState()
+    {
+        return _nameState;
     }
 
 

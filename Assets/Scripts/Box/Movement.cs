@@ -14,7 +14,13 @@ public class Movement : MonoBehaviour
     GameObject[] walls = null;
     GameObject[] tiles = null;
     GameObject[] monsters = null;
-    GameObject[] specialTiles = null;
+    GameObject[] acidTiles = null;
+    GameObject[] poisonTiles = null;
+    GameObject[] fireTiles = null;
+    GameObject[] cleanerTiles = null;
+    GameObject[] CubeSides = null;
+    GameObject currentFaceDown = null;
+    MovementResult movementResult;
     private void Start()
     {
         _cubeScript = GetComponent<Cube_Script>();
@@ -27,10 +33,61 @@ public class Movement : MonoBehaviour
         Die,
         CannotMove,
         CanMove,
+        PaintIntoAcid,
+        PaintIntoFire,
+        PaintIntoPoison,
+        PaintIntoEmpty,
         KillMonster,
         Win,
 
     }
+
+
+    private void UpdateSide()
+    {
+        StateSides stateSides = currentFaceDown.GetComponent<StateSides>();
+        if (movementResult == MovementResult.PaintIntoAcid)
+        {
+            if (stateSides.GetCurrentState() == "Empty")
+            {
+                stateSides.AddMoveSide("Acid");
+            }
+
+        }
+        if (movementResult == MovementResult.PaintIntoFire)
+        {
+            if (stateSides.GetCurrentState() == "Empty")
+            {
+                stateSides.AddMoveSide("Fire");
+            }
+        }
+        if (movementResult == MovementResult.PaintIntoPoison)
+        {
+            if (stateSides.GetCurrentState() == "Empty")
+            {
+                stateSides.AddMoveSide("Posion");
+            }
+        }        
+        if (movementResult == MovementResult.PaintIntoEmpty)
+        {
+
+            stateSides.AddMoveSide("Empty");
+        }
+    }
+
+    private void UpdateFaceDown()
+    {
+        foreach(GameObject obj in CubeSides)
+        {
+            if (obj.transform.up == new Vector3(0.0f, -1.0f, 0.0f))
+            {
+                currentFaceDown = obj;
+                return;
+            }
+        }
+        return;
+    }
+
     private MovementResult MovementCheck(KeyCode keyCode)
     {
         float x = transform.position.x;
@@ -80,6 +137,28 @@ public class Movement : MonoBehaviour
                 }
             }
         }
+        foreach (GameObject obj in acidTiles)
+        {
+            if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
+            {
+                return MovementResult.PaintIntoAcid;
+            }
+        }
+        foreach (GameObject obj in poisonTiles)
+        {
+            if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
+            {
+                return MovementResult.PaintIntoPoison;
+            }
+        }
+
+        foreach (GameObject obj in fireTiles)
+        {
+            if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
+            {
+                return MovementResult.PaintIntoFire;
+            }
+        }
         foreach (GameObject obj in tiles)
         {
             if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
@@ -105,51 +184,66 @@ public class Movement : MonoBehaviour
         {
             monsters = GameObject.FindGameObjectsWithTag("Monster");
         }
+        if (CubeSides == null)
+        {
+            CubeSides = GameObject.FindGameObjectsWithTag("CubeSide");
+        }
+        if (acidTiles == null)
+        {
+            acidTiles = GameObject.FindGameObjectsWithTag("Acid");
+        }
+        if (poisonTiles == null)
+        {
+            poisonTiles = GameObject.FindGameObjectsWithTag("Poison");
+        }
+        if (fireTiles == null)
+        {
+            fireTiles = GameObject.FindGameObjectsWithTag("Fire");
+        }
+
         if (_isMoving) return;
 
         if (_gameController != null)
         {
 
-            
+            MovementResult result;
             if (Input.GetKey(KeyCode.A))
             {
-                if (MovementCheck(KeyCode.A) > MovementResult.CannotMove)
+                movementResult = MovementCheck(KeyCode.A);
+                if (movementResult > MovementResult.CannotMove)
                 {
                     LeftMove(true);
                     ChangeSide();
                 }
-                return;
             }else if(Input.GetKey(KeyCode.D))
             {
-                if (MovementCheck(KeyCode.D) > MovementResult.CannotMove)
+                movementResult = MovementCheck(KeyCode.D);
+                if (movementResult > MovementResult.CannotMove)
                 {
                     RightMove(true);
                     ChangeSide();
                 }
-                return;
             } else if (Input.GetKey(KeyCode.W))
             {
-                if (MovementCheck(KeyCode.W) > MovementResult.CannotMove)
+                movementResult = MovementCheck(KeyCode.W);
+                if (movementResult > MovementResult.CannotMove)
                 {
                     ForwardMove(true);
                     ChangeSide();
                 }
-                return;
             } else if (Input.GetKey(KeyCode.S))
             {
-                if (MovementCheck(KeyCode.S) > MovementResult.CannotMove)
+                movementResult = MovementCheck(KeyCode.S);
+                if (movementResult > MovementResult.CannotMove)
                 {
                     BackMove(true);
                     ChangeSide();
                 }
-                return;
-            }
-
-            if (Input.GetKey(KeyCode.V))
+            } else if (Input.GetKey(KeyCode.V))
             {
+                //todo update faceDown
                 _cubeScript.ReMove();
                 RemoveSide();
-                return;
             }
         }
            
@@ -197,6 +291,8 @@ public class Movement : MonoBehaviour
             transform.RotateAround(anchor, axis, _rollSpeed);
             yield return new WaitForSeconds(0.01f);
         }
+        UpdateFaceDown();
+        UpdateSide();
         _isMoving = false;
     }
 
