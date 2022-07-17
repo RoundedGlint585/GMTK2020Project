@@ -6,20 +6,22 @@ public class StateSides : MonoBehaviour
 {
     [SerializeField] string _nameState;
     private GameController _gameController;
-    private Cube_Script _gameObjectDad;
+    [SerializeField] private GameObject _gameObjectDad;
     private Stack<string> _newState = new Stack<string>();
     private Side _side;
     private Side prefside;
 
     private void Start()
     {
-        _gameObjectDad = FindObjectOfType<Cube_Script>();
-        _gameController = GetComponent<GameController>();
+        //_gameObjectDad = FindObjectOfType<Cube_Script>();
+        _gameController = FindObjectOfType<GameController>();
 
         prefside = _gameController.FindPrefsState(_nameState);
-        AddMoveSide(_nameState);
-        
-        _side = Instantiate(prefside, _gameObjectDad.gameObject.transform.position, Quaternion.identity, _gameObjectDad.gameObject.transform);
+
+        _side = Instantiate(prefside, _gameObjectDad.gameObject.transform.position, _gameObjectDad.gameObject.transform.rotation, _gameObjectDad.gameObject.transform);
+        _newState.Push(_nameState);
+
+        //AddMoveSide(_nameState);
     }
 
     public void AddMoveSide(string newState)
