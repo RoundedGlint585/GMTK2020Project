@@ -383,12 +383,17 @@ if (_isMoving) return;
                 }
             } else if (Input.GetKey(KeyCode.V))
             {
-                //todo update faceDown
-                _cubeScript.ReMove();
-                RemoveSide();
+                RealRemove();
             }
         }
            
+    }
+
+    public void RealRemove()
+    {
+        //todo update faceDown
+        _cubeScript.ReMove();
+        RemoveSide();
     }
 
     public void LeftMove(bool is_user)
@@ -402,6 +407,7 @@ if (_isMoving) return;
         Assemble(Vector3.right);
         if (is_user) _cubeScript.AddMove("right");
     }
+
     public void ForwardMove(bool is_user)
     {
         Assemble(Vector3.forward);
