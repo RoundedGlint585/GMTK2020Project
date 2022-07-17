@@ -89,7 +89,7 @@ public class Movement : MonoBehaviour
     private void Assemble(Vector3 dir)
     {
 
-        var anchor = transform.position + (Vector3.down + dir) * 0.5f;
+        var anchor = transform.position + (Vector3.down + dir) * 2.0f;
         var axis = Vector3.Cross(Vector3.up, dir);
         StartCoroutine(Roll(anchor, axis));
     }
