@@ -14,15 +14,12 @@ public class StateSides : MonoBehaviour
 
     private void Start()
     {
-        //_gameObjectDad = FindObjectOfType<Cube_Script>();
         _gameController = FindObjectOfType<GameController>();
         movement = FindObjectOfType<Movement>();
         prefside = _gameController.FindPrefsState(_nameState);
 
         _side = Instantiate(prefside, _gameObjectDad.gameObject.transform.position, _gameObjectDad.gameObject.transform.rotation, _gameObjectDad.gameObject.transform);
         _newState.Push(_nameState);
-
-        //AddMoveSide(_nameState);
     }
 
     public void AddMoveSide(string newState)
@@ -46,23 +43,32 @@ public class StateSides : MonoBehaviour
             string oneState = _newState.Pop();
             if (oneState != _newState.Peek())
             {
-                GameObject obj = movement.GetTileAtCurrentPosition();
-                if (obj != null && oneState != "Empty")
+                GameObject obj = movement.GetCurrentTile();
+                if (oneState != "Empty")
                 {
+                    
                     obj.transform.tag = oneState;
                     obj.transform.Find(oneState + "(Placeholder)").gameObject.SetActive(true);
                     obj.transform.Find("default").gameObject.SetActive(true);
                     movement.UpdateTileType(oneState);
                     movement.UpdateTileType("Tile");
+
+                }
+                else
+                {
+                    obj.transform.tag = "Cleaner";
+                    obj.GetComponentInChildren<CleanerTile>().AddLife();
+                    movement.UpdateTileType("Cleaner");
+                    movement.UpdateTileType("Tile");
+                    _newState.Pop();
                 }
                 Destroy(_side.gameObject);
                 prefside = _gameController.FindPrefsState(_newState.Peek());
-                AddMoveSide("Empty");
-                //_side = Instantiate(prefside, _gameObjectDad.gameObject.transform.position, _gameObjectDad.gameObject.transform.rotation, _gameObjectDad.gameObject.transform);
+                _side = Instantiate(prefside, _gameObjectDad.gameObject.transform.position, _gameObjectDad.gameObject.transform.rotation, _gameObjectDad.gameObject.transform);
+                //_nameState = _newState.Peek();
+
             }
         }
-        
-        
     }
 
     public string GetCurrentState()

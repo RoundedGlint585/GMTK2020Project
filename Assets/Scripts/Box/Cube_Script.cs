@@ -8,6 +8,7 @@ public class Cube_Script : MonoBehaviour
 
     private Movement _movment;
 
+
     private void Start()
     {
         _movment = GetComponent<Movement>();

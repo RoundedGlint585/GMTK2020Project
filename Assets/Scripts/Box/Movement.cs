@@ -21,6 +21,9 @@ public class Movement : MonoBehaviour
     GameObject[] CubeSides = null;
     GameObject currentFaceDown = null;
     MovementResult movementResult;
+    GameObject currentTile = null;
+
+    bool isMovingBack = false;
     private void Start()
     {
         _cubeScript = GetComponent<Cube_Script>();
@@ -64,11 +67,14 @@ public class Movement : MonoBehaviour
             cleanerTiles = GameObject.FindGameObjectsWithTag("Cleaner");
         }
     }
+    
 
-    public GameObject GetTileAtCurrentPosition()
+    public GameObject GetCurrentTile()
     {
-        float x = transform.position.x;
-        float z = transform.position.z;
+        return currentTile;
+    }
+    public GameObject GetTileAtPosition(float x, float z)
+    {
         foreach (GameObject obj in tiles)
         {
             if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
@@ -76,6 +82,35 @@ public class Movement : MonoBehaviour
                 return obj;
             }
         }
+        foreach (GameObject obj in acidTiles)
+        {
+            if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
+            {
+                return obj;
+            }
+        }
+        foreach (GameObject obj in fireTiles)
+        {
+            if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
+            {
+                return obj;
+            }
+        }
+        foreach (GameObject obj in poisonTiles)
+        {
+            if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
+            {
+                return obj;
+            }
+        }
+        foreach (GameObject obj in cleanerTiles)
+        {
+            if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
+            {
+                return obj;
+            }
+        }
+        
         return null;
     }
 
@@ -132,9 +167,10 @@ public class Movement : MonoBehaviour
                     obj.transform.Find("default").gameObject.SetActive(true);
                     
                     tiles = GameObject.FindGameObjectsWithTag("Tile");
+                    stateSides.AddMoveSide(type);
                 }
             }
-            stateSides.AddMoveSide(type);
+            
         }
     }
 
@@ -269,14 +305,12 @@ public class Movement : MonoBehaviour
             }
             if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
             {
-                string attackSideName = "";
                 GameObject attackSide = null;
                 foreach (GameObject side in CubeSides)
                 {
                     //obj.transform.up == new Vector3(0.0f, -1.0f, 0.0f)
                     if (Mathf.Approximately(Vector3.Dot(attackDirection, side.transform.up), 1.0f))
                     {
-                        attackSideName = side.GetComponent<StateSides>().GetCurrentState();
                         attackSide = side;
                         continue;
                     }
@@ -413,6 +447,7 @@ if (_isMoving) return;
                 }
             } else if (Input.GetKey(KeyCode.V))
             {
+                isMovingBack = true;
                 RealRemove();
             }
         }
@@ -422,22 +457,22 @@ if (_isMoving) return;
     public void RealRemove()
     {
         //todo update faceDown
-        string sideType;
-        
 
-        _cubeScript.ReMove();
+        string sideType;
+        float x = transform.position.x;
+        float z = transform.position.z;
         RemoveSide();
+        _cubeScript.ReMove();
+
+
+        
         if (!GetIsRendering())
         {
             movementResult = MovementResult.CannotMove;
             SetIsRendering(true);
         }
 
-/*        GameObject currentTile = _mvmt.GetTileAtCurrentPosition();
-        if (currentTile != null)
-        {
 
-        }*/
     }
 
     public void LeftMove(bool is_user)
@@ -485,7 +520,17 @@ if (_isMoving) return;
         }
         _isMoving = false;
         UpdateFaceDown();
-        UpdateSide();
+        if (!isMovingBack) {
+            UpdateSide();
+        }
+        else
+        {
+            isMovingBack = false;
+        }
+        
+        float x = transform.position.x;
+        float z = transform.position.z;
+        currentTile = GetTileAtPosition(x, z);
     }
 
     public void ChangeSide()
