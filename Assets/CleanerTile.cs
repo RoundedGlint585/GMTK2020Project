@@ -21,6 +21,17 @@ public class CleanerTile : MonoBehaviour
         }
         
     }
+
+    public void AddLife()
+    {
+        livesLeft++;
+        this.transform.Find(livesLeft.ToString() + "Turn").gameObject.SetActive(true);
+        if(livesLeft > 0)
+        {
+            this.transform.Find(livesLeft.ToString() + "Turn").gameObject.SetActive(false);
+        }
+    }
+
     public int GetRemainingLifes()
     {
         return livesLeft;

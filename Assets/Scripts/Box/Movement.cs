@@ -42,73 +42,149 @@ public class Movement : MonoBehaviour
 
     }
 
+    public void UpdateTileType(string type)
+    {
+        if(type == "Poison")
+        {
+            poisonTiles = GameObject.FindGameObjectsWithTag("Poison");
+        }
+        else if(type == "Acid")
+        {
+            acidTiles = GameObject.FindGameObjectsWithTag("Acid");
+        }else if(type == "Fire")
+        {
+            fireTiles = GameObject.FindGameObjectsWithTag("Fire");
+        }
+        else if (type == "Tile")
+        {
+            tiles = GameObject.FindGameObjectsWithTag("Tile");
+        }
+        else if (type == "Cleaner")
+        {
+            cleanerTiles = GameObject.FindGameObjectsWithTag("Cleaner");
+        }
+    }
+
+    public GameObject GetTileAtCurrentPosition()
+    {
+        float x = transform.position.x;
+        float z = transform.position.z;
+        foreach (GameObject obj in tiles)
+        {
+            if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
+            {
+                return obj;
+            }
+        }
+        return null;
+    }
+
+    public GameObject GetCleanerAtCurrentPosition()
+    {
+        {
+            float x = transform.position.x;
+            float z = transform.position.z;
+            foreach (GameObject obj in cleanerTiles)
+            {
+                if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
+                {
+                    return obj;
+                }
+            }
+            return null;
+        }
+
+    }
     public MovementResult GetCurrentMovementResults()
     {
         return movementResult;
     }
 
-    private void UpdateSide()
+
+    public void SetIsRendering(bool state)
+    {
+        this.GetComponent<MeshRenderer>().enabled = state;
+        MeshRenderer[] sides = this.GetComponentsInChildren< MeshRenderer >();
+        foreach (var side in sides)
+        {
+            side.enabled = state;
+        }
+    }
+
+    public bool GetIsRendering()
+    {
+        return this.GetComponent<MeshRenderer>().enabled;
+    }
+
+    void UpdateMoveToColored(GameObject[] coloredTiles, string type)
     {
         StateSides stateSides = currentFaceDown.GetComponent<StateSides>();
         float x = transform.position.x;
         float z = transform.position.z;
+        if (stateSides.GetCurrentState() == "Empty")
+        {
+            foreach (GameObject obj in coloredTiles)
+            {
+                if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
+                {
+                    obj.transform.tag = "Tile";
+                    obj.transform.Find(type + "(Placeholder)").gameObject.SetActive(false);
+                    obj.transform.Find("default").gameObject.SetActive(true);
+                    
+                    tiles = GameObject.FindGameObjectsWithTag("Tile");
+                }
+            }
+            stateSides.AddMoveSide(type);
+        }
+    }
+
+    MovementResult CheckMoveOnMonster(GameObject tile, string monsterType, string requestedSide, GameObject attackSide)
+    {
+            if (attackSide.GetComponent<StateSides>().GetCurrentState() == requestedSide)
+            {
+                Destroy(tile.transform.Find(monsterType).gameObject);
+                if (monsters.Length == 1)
+                {
+                    return MovementResult.Win;
+                }
+                else
+                {
+                    tile.transform.tag = "Tile";
+                    monsters = GameObject.FindGameObjectsWithTag("Monster");
+                    tiles = GameObject.FindGameObjectsWithTag("Tile");
+                    attackSide.GetComponent<StateSides>().AddMoveSide("Empty");
+                    return MovementResult.KillMonster;
+                }
+            }
+            else
+            {
+                SetIsRendering(false);
+                return MovementResult.Die;
+            }
+    }
+    private void UpdateSide()
+    {
+
         if (movementResult == MovementResult.PaintIntoAcid)
         {
-            if (stateSides.GetCurrentState() == "Empty")
-            {
-                foreach (GameObject obj in acidTiles)
-                {
-                    if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
-                    {
-                        obj.transform.tag = "Tile";
-                        obj.transform.Find("Acid(Placeholder)").gameObject.SetActive(false);
-                        obj.transform.Find("default").gameObject.SetActive(true);
-                        acidTiles = GameObject.FindGameObjectsWithTag("Acid");
-                        tiles = GameObject.FindGameObjectsWithTag("Tile");
-                    }
-                }
-                stateSides.AddMoveSide("Acid");
-            }
-
+            UpdateMoveToColored(acidTiles, "Acid");
+            acidTiles = GameObject.FindGameObjectsWithTag("Acid");
         }
         if (movementResult == MovementResult.PaintIntoFire)
         {
-            if (stateSides.GetCurrentState() == "Empty")
-            {
-                foreach (GameObject obj in fireTiles)
-                {
-                    if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
-                    {
-                        obj.transform.tag = "Tile";
-                        obj.transform.Find("Fire(Placeholder)").gameObject.SetActive(false);
-                        obj.transform.Find("default").gameObject.SetActive(true);
-                        fireTiles = GameObject.FindGameObjectsWithTag("Fire");
-                        tiles = GameObject.FindGameObjectsWithTag("Tile");
-                    }
-                }
-                stateSides.AddMoveSide("Fire");
-            }
+            UpdateMoveToColored(fireTiles, "Fire");
+            fireTiles = GameObject.FindGameObjectsWithTag("Fire");
         }
         if (movementResult == MovementResult.PaintIntoPoison)
         {
-            if (stateSides.GetCurrentState() == "Empty")
-            {
-                foreach (GameObject obj in poisonTiles)
-                {
-                    if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
-                    {
-                        obj.transform.tag = "Tile";
-                        obj.transform.Find("Poison(Placeholder)").gameObject.SetActive(false);
-                        obj.transform.Find("default").gameObject.SetActive(true);
-                        poisonTiles = GameObject.FindGameObjectsWithTag("Poison");
-                        tiles = GameObject.FindGameObjectsWithTag("Tile");
-                    }
-                }
-                stateSides.AddMoveSide("Poison");
-            }
+            UpdateMoveToColored(poisonTiles, "Poison");
+            poisonTiles = GameObject.FindGameObjectsWithTag("Poison");
         }        
         if (movementResult == MovementResult.PaintIntoEmpty)
         {
+            StateSides stateSides = currentFaceDown.GetComponent<StateSides>();
+            float x = transform.position.x;
+            float z = transform.position.z;
             if (stateSides.GetCurrentState() != "Empty")
             {
                 foreach (GameObject obj in cleanerTiles)
@@ -130,6 +206,7 @@ public class Movement : MonoBehaviour
             }
             else
             {
+                SetIsRendering(false);
                 movementResult = MovementResult.Die;
             }
             stateSides.AddMoveSide("Empty");
@@ -139,7 +216,6 @@ public class Movement : MonoBehaviour
     private void UpdateFaceDown()
     {
         foreach(GameObject obj in CubeSides) {
-            //obj.transform.up == new Vector3(0.0f, -1.0f, 0.0f)
             if (Mathf.Approximately(Vector3.Dot(new Vector3(0.0f, -1.0f, 0.0f), obj.transform.up), 1.0f) )
             {
                 currentFaceDown = obj;
@@ -149,6 +225,10 @@ public class Movement : MonoBehaviour
         return;
     }
 
+    public GameObject GetCurrentFaceDown()
+    {
+        return currentFaceDown;
+    }
     private MovementResult MovementCheck(KeyCode keyCode)
     {
         float x = transform.position.x;
@@ -189,81 +269,33 @@ public class Movement : MonoBehaviour
             }
             if (Mathf.Approximately(x, obj.transform.position.x) && Mathf.Approximately(z, obj.transform.position.z))
             {
-                string attackSide = "";
+                string attackSideName = "";
+                GameObject attackSide = null;
                 foreach (GameObject side in CubeSides)
                 {
                     //obj.transform.up == new Vector3(0.0f, -1.0f, 0.0f)
                     if (Mathf.Approximately(Vector3.Dot(attackDirection, side.transform.up), 1.0f))
                     {
-                        attackSide = side.GetComponent<StateSides>().GetCurrentState();
+                        attackSideName = side.GetComponent<StateSides>().GetCurrentState();
+                        attackSide = side;
                         continue;
                     }
                 }
                 if (obj.transform.Find("EyeEnemy"))
                 {
-                    if(attackSide == "Acid")
-                    {
-                        Destroy(obj.transform.Find("EyeEnemy").gameObject);
-                        obj.transform.tag = "Tile";
-                        monsters = GameObject.FindGameObjectsWithTag("Monster");
-                        tiles = GameObject.FindGameObjectsWithTag("Tile");
-                        if (monsters.Length == 1)
-                        {
-                            return MovementResult.Win;
-                        }
-                        else
-                        {
-                            return MovementResult.KillMonster;
-                        }
-                    }
-                    else
-                    {
-                        return MovementResult.Die;
-                    }
+                    movementResult = CheckMoveOnMonster(obj, "EyeEnemy", "Acid", attackSide);
+                    return movementResult;
                 }
                 else if (obj.transform.Find("BookEnemy"))
                 {
-                    if (attackSide == "Fire")
-                    {
-                        Destroy(obj.transform.Find("BookEnemy").gameObject);
-                        obj.transform.tag = "Tile";
-                        monsters = GameObject.FindGameObjectsWithTag("Monster");
-                        tiles = GameObject.FindGameObjectsWithTag("Tile");
-                        if (monsters.Length == 1)
-                        {
-                            return MovementResult.Win;
-                        }
-                        else
-                        {
-                            return MovementResult.KillMonster;
-                        }
-                    }
-                    else
-                    {
-                        return MovementResult.Die;
-                    }
+
+                    movementResult = CheckMoveOnMonster(obj, "BookEnemy", "Fire", attackSide);
+                    return movementResult;
                 }
                 else if (obj.transform.Find("PoisonEnemy"))
                 {
-                    if (attackSide == "Poison")
-                    {
-                        Destroy(obj.transform.Find("PoisonEnemy").gameObject);
-                        obj.transform.tag = "Tile";
-                        monsters = GameObject.FindGameObjectsWithTag("Monster");
-                        tiles = GameObject.FindGameObjectsWithTag("Tile");
-                        if (monsters.Length == 1)
-                        {
-                            return MovementResult.Win;
-                        }
-                        else
-                        {
-                            return MovementResult.KillMonster;
-                        }
-                    }
-                    else
-                    {
-                        return MovementResult.Die;
-                    }
+                    movementResult = CheckMoveOnMonster(obj, "PoisonEnemy", "Poison", attackSide);
+                    return movementResult;
                 }
             }
         }
@@ -347,8 +379,6 @@ if (_isMoving) return;
 
         if (_gameController != null)
         {
-
-            MovementResult result;
             if (Input.GetKey(KeyCode.A))
             {
                 movementResult = MovementCheck(KeyCode.A);
@@ -392,8 +422,22 @@ if (_isMoving) return;
     public void RealRemove()
     {
         //todo update faceDown
+        string sideType;
+        
+
         _cubeScript.ReMove();
         RemoveSide();
+        if (!GetIsRendering())
+        {
+            movementResult = MovementResult.CannotMove;
+            SetIsRendering(true);
+        }
+
+/*        GameObject currentTile = _mvmt.GetTileAtCurrentPosition();
+        if (currentTile != null)
+        {
+
+        }*/
     }
 
     public void LeftMove(bool is_user)

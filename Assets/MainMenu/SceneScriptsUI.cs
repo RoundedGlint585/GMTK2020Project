@@ -34,17 +34,14 @@ public class SceneScriptsUI : MonoBehaviour
     {
         _cube = FindObjectOfType<Cube_Script>();
         _mvmt = FindObjectOfType<Movement>();
-        
-        var result = _mvmt.GetCurrentMovementResults();
 
-        if(result == Movement.MovementResult.Die)
+        if (_mvmt != null)
         {
-            StepBack();
-        }
-
-        if(result == Movement.MovementResult.Win)
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            var result = _mvmt.GetCurrentMovementResults();
+            if (result == Movement.MovementResult.Win)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            }
         }
     }
 

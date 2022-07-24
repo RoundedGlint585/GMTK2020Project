@@ -10,12 +10,13 @@ public class StateSides : MonoBehaviour
     private Stack<string> _newState = new Stack<string>();
     private Side _side;
     private Side prefside;
+    private Movement movement;
 
     private void Start()
     {
         //_gameObjectDad = FindObjectOfType<Cube_Script>();
         _gameController = FindObjectOfType<GameController>();
-
+        movement = FindObjectOfType<Movement>();
         prefside = _gameController.FindPrefsState(_nameState);
 
         _side = Instantiate(prefside, _gameObjectDad.gameObject.transform.position, _gameObjectDad.gameObject.transform.rotation, _gameObjectDad.gameObject.transform);
@@ -45,9 +46,19 @@ public class StateSides : MonoBehaviour
             string oneState = _newState.Pop();
             if (oneState != _newState.Peek())
             {
+                GameObject obj = movement.GetTileAtCurrentPosition();
+                if (obj != null && oneState != "Empty")
+                {
+                    obj.transform.tag = oneState;
+                    obj.transform.Find(oneState + "(Placeholder)").gameObject.SetActive(true);
+                    obj.transform.Find("default").gameObject.SetActive(true);
+                    movement.UpdateTileType(oneState);
+                    movement.UpdateTileType("Tile");
+                }
                 Destroy(_side.gameObject);
                 prefside = _gameController.FindPrefsState(_newState.Peek());
-                _side = Instantiate(prefside, _gameObjectDad.gameObject.transform.position, _gameObjectDad.gameObject.transform.rotation, _gameObjectDad.gameObject.transform);
+                AddMoveSide("Empty");
+                //_side = Instantiate(prefside, _gameObjectDad.gameObject.transform.position, _gameObjectDad.gameObject.transform.rotation, _gameObjectDad.gameObject.transform);
             }
         }
         
