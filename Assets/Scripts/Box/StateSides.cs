@@ -52,7 +52,7 @@ public class StateSides : MonoBehaviour
                     obj.transform.Find("default").gameObject.SetActive(true);
                     movement.UpdateTileType(oneState);
                     movement.UpdateTileType("Tile");
-
+                    _nameState = "Empty";
                 }
                 else
                 {
@@ -60,6 +60,7 @@ public class StateSides : MonoBehaviour
                     obj.GetComponentInChildren<CleanerTile>().AddLife();
                     movement.UpdateTileType("Cleaner");
                     movement.UpdateTileType("Tile");
+                    _nameState = _newState.Peek();
                     _newState.Pop();
                 }
                 Destroy(_side.gameObject);

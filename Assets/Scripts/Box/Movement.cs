@@ -20,7 +20,7 @@ public class Movement : MonoBehaviour
     GameObject[] cleanerTiles = null;
     GameObject[] CubeSides = null;
     GameObject currentFaceDown = null;
-    MovementResult movementResult;
+    MovementResult movementResult = MovementResult.CannotMove;
     GameObject currentTile = null;
 
     bool isMovingBack = false;
@@ -413,6 +413,15 @@ if (_isMoving) return;
 
         if (_gameController != null)
         {
+            if(movementResult == MovementResult.Die)
+            {
+                if (Input.GetKey(KeyCode.V))
+                {
+                    isMovingBack = true;
+                    RealRemove();
+                }
+                return;
+            }
             if (Input.GetKey(KeyCode.A))
             {
                 movementResult = MovementCheck(KeyCode.A);
