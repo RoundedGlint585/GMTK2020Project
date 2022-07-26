@@ -110,7 +110,15 @@ public class Movement : MonoBehaviour
                 return obj;
             }
         }
-        
+
+        foreach (GameObject obj in monsters)
+        {
+            if (Mathf.Approximately(x, obj.transform.parent.transform.position.x) && Mathf.Approximately(z, obj.transform.parent.position.z))
+            {
+                return obj.transform.parent.gameObject;
+            }
+        }
+
         return null;
     }
 
@@ -173,13 +181,23 @@ public class Movement : MonoBehaviour
             
         }
     }
-
+    private bool CheckIsWin()
+    {
+        foreach(GameObject monster in monsters)
+        {
+            if (monster.activeSelf)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
     MovementResult CheckMoveOnMonster(GameObject tile, string monsterType, string requestedSide, GameObject attackSide)
     {
             if (attackSide.GetComponent<StateSides>().GetCurrentState() == requestedSide)
             {
-                Destroy(tile.transform.Find(monsterType).gameObject);
-                if (monsters.Length == 1)
+                tile.transform.Find(monsterType).gameObject.SetActive(false);
+                if (CheckIsWin())
                 {
                     return MovementResult.Win;
                 }
@@ -428,7 +446,10 @@ if (_isMoving) return;
                 if (movementResult > MovementResult.CannotMove)
                 {
                     LeftMove(true);
-                    ChangeSide();
+                    if (movementResult != MovementResult.KillMonster)
+                    {
+                        ChangeSide();
+                    }
                 }
             }else if(Input.GetKey(KeyCode.D))
             {
@@ -436,7 +457,10 @@ if (_isMoving) return;
                 if (movementResult > MovementResult.CannotMove)
                 {
                     RightMove(true);
-                    ChangeSide();
+                    if (movementResult != MovementResult.KillMonster)
+                    {
+                        ChangeSide();
+                    }
                 }
             } else if (Input.GetKey(KeyCode.W))
             {
@@ -444,7 +468,10 @@ if (_isMoving) return;
                 if (movementResult > MovementResult.CannotMove)
                 {
                     ForwardMove(true);
-                    ChangeSide();
+                    if (movementResult != MovementResult.KillMonster)
+                    {
+                        ChangeSide();
+                    }
                 }
             } else if (Input.GetKey(KeyCode.S))
             {
@@ -452,7 +479,10 @@ if (_isMoving) return;
                 if (movementResult > MovementResult.CannotMove)
                 {
                     BackMove(true);
-                    ChangeSide();
+                    if(movementResult != MovementResult.KillMonster)
+                    {
+                        ChangeSide();
+                    }
                 }
             } else if (Input.GetKey(KeyCode.V))
             {
