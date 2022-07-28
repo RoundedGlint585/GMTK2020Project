@@ -13,7 +13,6 @@ public class GameController : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
         if (_SideState.Length == _nameStates.Length)
         {
             for(int i = 0; i < _SideState.Length; i++)

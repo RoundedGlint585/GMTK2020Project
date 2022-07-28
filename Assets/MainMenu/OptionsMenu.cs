@@ -13,6 +13,6 @@ public class OptionsMenu : MonoBehaviour
 
     public void SetVolumeMusic(float valMusic)
     {
-        audioMixer.SetFloat("VolumeMusic", valMusic);
+        audioMixer.SetFloat("VolumMusic", valMusic);
     }
 }
