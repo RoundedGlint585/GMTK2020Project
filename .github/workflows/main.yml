@@ -32,5 +32,5 @@ jobs:
           BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
           CHANNEL: html5
           ITCH_GAME: enchantedice
-          ITCH_USER: roundedglint585
+          ITCH_USER: karasikrus
           PACKAGE: build/WebGL
