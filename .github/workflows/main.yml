@@ -2,7 +2,7 @@ name: Build Project and Publish to itch.io
 on: [push]
 jobs:
   build:
-    name: Build Project and Publish to itch.io ✨
+    name: Build Project and Publish to itch.io
     runs-on: ubuntu-latest
     concurrency: 
       group: unity-build
@@ -26,3 +26,11 @@ jobs:
         with:
           name: Build
           path: build          
+      # Upload to Itch
+      - uses: josephbmanley/butler-publish-itchio-action@master
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+          CHANNEL: html5
+          ITCH_GAME: enchantedice
+          ITCH_USER: roundedglint585
+          PACKAGE: build/WebGL
