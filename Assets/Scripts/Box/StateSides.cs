@@ -11,9 +11,11 @@ public class StateSides : MonoBehaviour
     private Side _side;
     private Side prefside;
     private Movement movement;
+    private AudioSource _audio;
 
     private void Start()
     {
+        _audio = GetComponent<AudioSource>();
         _gameController = FindObjectOfType<GameController>();
         movement = FindObjectOfType<Movement>();
         prefside = _gameController.FindPrefsState(_nameState);
@@ -28,6 +30,7 @@ public class StateSides : MonoBehaviour
         _newState.Push(newState);
         prefside = _gameController.FindPrefsState(newState);
         Destroy(_side.gameObject);
+        _audio.Play();
         _side = Instantiate(prefside, _gameObjectDad.gameObject.transform.position, _gameObjectDad.gameObject.transform.rotation, _gameObjectDad.gameObject.transform);
     }
 
