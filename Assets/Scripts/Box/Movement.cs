@@ -110,7 +110,15 @@ public class Movement : MonoBehaviour
                 return obj;
             }
         }
-        
+
+        foreach (GameObject obj in monsters)
+        {
+            if (Mathf.Approximately(x, obj.transform.parent.transform.position.x) && Mathf.Approximately(z, obj.transform.parent.position.z))
+            {
+                return obj.transform.parent.gameObject;
+            }
+        }
+
         return null;
     }
 
@@ -173,13 +181,23 @@ public class Movement : MonoBehaviour
             
         }
     }
-
+    private bool CheckIsWin()
+    {
+        foreach(GameObject monster in monsters)
+        {
+            if (monster.activeSelf)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
     MovementResult CheckMoveOnMonster(GameObject tile, string monsterType, string requestedSide, GameObject attackSide)
     {
             if (attackSide.GetComponent<StateSides>().GetCurrentState() == requestedSide)
             {
-                Destroy(tile.transform.Find(monsterType).gameObject);
-                if (monsters.Length == 1)
+                tile.transform.Find(monsterType).gameObject.SetActive(false);
+                if (CheckIsWin())
                 {
                     return MovementResult.Win;
                 }
@@ -417,42 +435,56 @@ if (_isMoving) return;
             {
                 if (Input.GetKey(KeyCode.V))
                 {
+                    SetIsRendering(true);
                     isMovingBack = true;
                     RealRemove();
+                    movementResult = MovementResult.CanMove;
                 }
                 return;
             }
             if (Input.GetKey(KeyCode.A))
             {
                 movementResult = MovementCheck(KeyCode.A);
-                if (movementResult > MovementResult.CannotMove)
+                if (movementResult > MovementResult.CannotMove || movementResult == MovementResult.Die)
                 {
                     LeftMove(true);
-                    ChangeSide();
+                    if (movementResult != MovementResult.KillMonster)
+                    {
+                        ChangeSide();
+                    }
                 }
             }else if(Input.GetKey(KeyCode.D))
             {
                 movementResult = MovementCheck(KeyCode.D);
-                if (movementResult > MovementResult.CannotMove)
+                if (movementResult > MovementResult.CannotMove || movementResult == MovementResult.Die)
                 {
                     RightMove(true);
-                    ChangeSide();
+                    if (movementResult != MovementResult.KillMonster)
+                    {
+                        ChangeSide();
+                    }
                 }
             } else if (Input.GetKey(KeyCode.W))
             {
                 movementResult = MovementCheck(KeyCode.W);
-                if (movementResult > MovementResult.CannotMove)
+                if (movementResult > MovementResult.CannotMove || movementResult == MovementResult.Die)
                 {
                     ForwardMove(true);
-                    ChangeSide();
+                    if (movementResult != MovementResult.KillMonster)
+                    {
+                        ChangeSide();
+                    }
                 }
             } else if (Input.GetKey(KeyCode.S))
             {
                 movementResult = MovementCheck(KeyCode.S);
-                if (movementResult > MovementResult.CannotMove)
+                if (movementResult > MovementResult.CannotMove || movementResult == MovementResult.Die)
                 {
                     BackMove(true);
-                    ChangeSide();
+                    if(movementResult != MovementResult.KillMonster)
+                    {
+                        ChangeSide();
+                    }
                 }
             } else if (Input.GetKey(KeyCode.V))
             {
@@ -466,22 +498,8 @@ if (_isMoving) return;
     public void RealRemove()
     {
         //todo update faceDown
-
-        string sideType;
-        float x = transform.position.x;
-        float z = transform.position.z;
         RemoveSide();
         _cubeScript.ReMove();
-
-
-        
-        if (!GetIsRendering())
-        {
-            movementResult = MovementResult.CannotMove;
-            SetIsRendering(true);
-        }
-
-
     }
 
     public void LeftMove(bool is_user)
@@ -520,13 +538,14 @@ if (_isMoving) return;
     IEnumerator Roll(Vector3 anchor, Vector3 axis)
     {
         _isMoving = true;
-        AudioSource audioSource = this.GetComponentInParent<AudioSource>();
-        audioSource.Play();
+
         for (int i = 0; i < (90 / _rollSpeed); i++)
         {
             transform.RotateAround(anchor, axis, _rollSpeed);
             yield return new WaitForSeconds(0.01f);
         }
+        AudioSource audioSource = this.GetComponentInParent<AudioSource>();
+        audioSource.Play();
         _isMoving = false;
         UpdateFaceDown();
         if (!isMovingBack) {
@@ -536,7 +555,10 @@ if (_isMoving) return;
         {
             isMovingBack = false;
         }
-        
+        Vector3 tempPosition = transform.position;
+        tempPosition.x = Mathf.Round(transform.position.x);
+        tempPosition.z = Mathf.Round(transform.position.z);
+        transform.position = tempPosition;
         float x = transform.position.x;
         float z = transform.position.z;
         currentTile = GetTileAtPosition(x, z);

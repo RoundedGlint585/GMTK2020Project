@@ -59,10 +59,30 @@ public class StateSides : MonoBehaviour
                 }
                 else
                 {
-                    obj.transform.tag = "Cleaner";
-                    obj.GetComponentInChildren<CleanerTile>().AddLife();
-                    movement.UpdateTileType("Cleaner");
-                    movement.UpdateTileType("Tile");
+                    CleanerTile cleanerTile = obj.GetComponentInChildren<CleanerTile>();
+                    if (cleanerTile != null)
+                    {
+                        obj.transform.tag = "Cleaner";
+                        cleanerTile.AddLife();
+                        movement.UpdateTileType("Cleaner");
+                        movement.UpdateTileType("Tile");
+                    }
+                    else
+                    {
+                        Transform enemy = obj.transform.Find("PoisonEnemy");
+                        if(enemy == null)
+                        {
+                            enemy = obj.transform.Find("EyeEnemy");
+                        }
+                        if (enemy == null)
+                        {
+                            enemy = obj.transform.Find("BookEnemy");
+                        }
+                        if (enemy)
+                        {
+                            enemy.gameObject.SetActive(true);
+                        }
+                    }
                     _nameState = _newState.Peek();
                     _newState.Pop();
                 }
