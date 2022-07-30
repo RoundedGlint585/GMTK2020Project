@@ -183,14 +183,15 @@ public class Movement : MonoBehaviour
     }
     private bool CheckIsWin()
     {
+        int aliveCount = 0;
         foreach(GameObject monster in monsters)
         {
             if (monster.activeSelf)
             {
-                return false;
+                aliveCount++;
             }
         }
-        return true;
+        return aliveCount <= 1;
     }
     MovementResult CheckMoveOnMonster(GameObject tile, string monsterType, string requestedSide, GameObject attackSide)
     {
