@@ -21,6 +21,10 @@ public class SceneScriptsUI : MonoBehaviour
 
     public void StepBack()
     {
+        if (_mvmt.GetIsMoving())
+        {
+            return;
+        }
         if (flags && !_mvmt.IsMovingBack())
         {
             if (!_mvmt.GetIsRendering())
