@@ -542,6 +542,10 @@ if (_isMoving) return;
         StartCoroutine(Roll(anchor, axis));
     }
 
+    public bool GetIsMoving()
+    {
+        return _isMoving;
+    }
     IEnumerator Roll(Vector3 anchor, Vector3 axis)
     {
         _isMoving = true;
