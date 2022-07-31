@@ -24,6 +24,11 @@ public class Movement : MonoBehaviour
     GameObject currentTile = null;
 
     bool isMovingBack = false;
+
+    public bool IsMovingBack()
+    {
+        return isMovingBack;
+    }
     private void Start()
     {
         _cubeScript = GetComponent<Cube_Script>();

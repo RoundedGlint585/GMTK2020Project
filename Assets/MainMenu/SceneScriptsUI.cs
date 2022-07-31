@@ -17,7 +17,7 @@ public class SceneScriptsUI : MonoBehaviour
 
     public void StepBack()
     {
-        if (flags)
+        if (flags && !_mvmt.IsMovingBack())
         {
             _mvmt.RealRemove();
             flags = false;
