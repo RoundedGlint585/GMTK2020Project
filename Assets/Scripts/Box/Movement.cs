@@ -24,6 +24,11 @@ public class Movement : MonoBehaviour
     GameObject currentTile = null;
 
     bool isMovingBack = false;
+
+    public bool IsMovingBack()
+    {
+        return isMovingBack;
+    }
     private void Start()
     {
         _cubeScript = GetComponent<Cube_Script>();
@@ -434,7 +439,7 @@ if (_isMoving) return;
         {
             if(movementResult == MovementResult.Die)
             {
-                if (Input.GetKey(KeyCode.V))
+                if (Input.GetKey(KeyCode.E))
                 {
                     SetIsRendering(true);
                     isMovingBack = true;
@@ -487,7 +492,7 @@ if (_isMoving) return;
                         ChangeSide();
                     }
                 }
-            } else if (Input.GetKey(KeyCode.V))
+            } else if (Input.GetKey(KeyCode.E))
             {
                 isMovingBack = true;
                 RealRemove();

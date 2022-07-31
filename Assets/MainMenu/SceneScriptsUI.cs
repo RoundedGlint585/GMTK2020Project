@@ -17,8 +17,12 @@ public class SceneScriptsUI : MonoBehaviour
 
     public void StepBack()
     {
-        if (flags)
+        if (flags && !_mvmt.IsMovingBack())
         {
+            if (!_mvmt.GetIsRendering())
+            {
+                _mvmt.SetIsRendering(true);
+            }
             _mvmt.RealRemove();
             flags = false;
             StartCoroutine(Wait());
