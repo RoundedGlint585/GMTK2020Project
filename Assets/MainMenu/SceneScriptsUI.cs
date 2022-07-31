@@ -10,6 +10,10 @@ public class SceneScriptsUI : MonoBehaviour
     private Cube_Script _cube;
     private bool flags = true;
 
+
+    float startTime = 0f;
+    public float RestartTime = 0.1f;
+
     public void GoToMenu()
     {
         SceneManager.LoadScene("MenuScene");
@@ -46,6 +50,23 @@ public class SceneScriptsUI : MonoBehaviour
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            startTime = Time.time;
+        }else 
+        if (Input.GetKey(KeyCode.R))
+        {
+            if(Time.time - startTime >= RestartTime)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                startTime = float.PositiveInfinity;
+            }
+        }
+        else
+        {
+            startTime = float.PositiveInfinity;
         }
     }
 

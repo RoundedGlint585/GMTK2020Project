@@ -157,6 +157,7 @@ public class Movement : MonoBehaviour
         {
             side.enabled = state;
         }
+        movementResult = MovementResult.CannotMove;
     }
 
     public bool GetIsRendering()
