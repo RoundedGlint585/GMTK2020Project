@@ -19,6 +19,10 @@ public class SceneScriptsUI : MonoBehaviour
     {
         if (flags && !_mvmt.IsMovingBack())
         {
+            if (!_mvmt.GetIsRendering())
+            {
+                _mvmt.SetIsRendering(true);
+            }
             _mvmt.RealRemove();
             flags = false;
             StartCoroutine(Wait());
